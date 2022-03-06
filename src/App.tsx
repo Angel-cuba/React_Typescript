@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 
 interface Task {
 	name: string;
@@ -15,8 +15,21 @@ function App(): JSX.Element {
 		setNewTask('');
 	};
 
-	const addTask = (name: string) => {
+	const addTask = (name: string): void => {
 		const newTasks = [...tasks, { name, done: false }];
+		setTasks(newTasks);
+	};
+
+	const toggleDoneTask = (index: number): void => {
+		const newTask: Task[] = [...tasks];
+		newTask[index].done = !newTask[index].done;
+		setTasks(newTask);
+	};
+
+	const handleDelete = (index: number): void => {
+		console.log(index);
+		const newTasks: Task[] = [...tasks];
+		newTasks.splice(index, 1);
 		setTasks(newTasks);
 	};
 
@@ -32,13 +45,24 @@ function App(): JSX.Element {
 									onChange={(e) => setNewTask(e.target.value)}
 									value={newTask}
 									className="form-control"
+									autoFocus
 								/>
 								<button className="btn btn-success btn-block mt-2">Save</button>
 							</form>
 						</div>
 					</div>
 					{tasks.map((task: Task, index: number) => (
-						<h1 key={index}>{task.name}</h1>
+						<div key={index} className="card card-body mt-2">
+							<h2 style={{ textDecoration: task.done ? 'line-through' : ' ' }}>{task.name}</h2>
+							<div>
+								<button className="btn btn-secondary" onClick={() => toggleDoneTask(index)}>
+									{task.done ? 'On' : 'Off'}
+								</button>
+								<button className="btn btn-danger" onClick={() => handleDelete(index)}>
+									Delete
+								</button>
+							</div>
+						</div>
 					))}
 				</div>
 			</div>
