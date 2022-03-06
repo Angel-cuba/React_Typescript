@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 interface Task {
 	name: string;
@@ -8,11 +8,13 @@ interface Task {
 function App(): JSX.Element {
 	const [newTask, setNewTask] = useState<string>('');
 	const [tasks, setTasks] = useState<Task[]>([]);
+	const taskInput = useRef<HTMLInputElement>(null);
 
 	const handleTask = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		addTask(newTask);
 		setNewTask('');
+		taskInput.current?.focus();
 	};
 
 	const addTask = (name: string): void => {
@@ -46,6 +48,7 @@ function App(): JSX.Element {
 									value={newTask}
 									className="form-control"
 									autoFocus
+									ref={taskInput}
 								/>
 								<button className="btn btn-success btn-block mt-2">Save</button>
 							</form>
